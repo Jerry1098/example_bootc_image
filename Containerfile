@@ -4,7 +4,6 @@ RUN dnf install -y greenboot \
 	greenboot-default-health-checks \
 	neovim \
 	zoxide \
-	traceroute \
 	&& \
 	dnf clean all
 
