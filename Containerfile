@@ -7,6 +7,6 @@ RUN dnf install -y greenboot \
 	&& \
 	dnf clean all
 
-RUN dnf install -y traceroute && dnf clean all
+# RUN dnf install -y traceroute && dnf clean all
 
 RUN bootc container lint
