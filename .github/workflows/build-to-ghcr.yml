@@ -1,0 +1,46 @@
+name: Build and Push Docker Image
+
+on:
+  push:
+    tags:
+      - "*"
+  workflow_dispatch:
+
+env:
+  REGISTRY: ghcr.io
+  GHCR_MAIN_IMAGE_NAME: ghcr.io/Jerry1098/example_bootc_image
+  GHCR_IMAGE_TAG: latest
+  
+
+jobs:
+  deploy_main:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: read
+      packages: write
+      
+    steps:
+      - name: Lowercase IMAGE_TAG
+        run: |
+          echo "MAIN_IMAGE_TAG=${GHCR_MAIN_IMAGE_NAME@L}:${GHCR_IMAGE_TAG}" >> "${GITHUB_ENV}"
+      
+      - name: Checkout code
+        uses: actions/checkout@v6
+        
+      - name: Log in to GitHub Docker Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and Push main Image
+        uses: docker/build-push-action@v6
+        with:
+          file: ./Containerfile
+          context: .
+          push: true
+          tags: ${{ env.MAIN_IMAGE_TAG }}
+
+        
