@@ -52,6 +52,10 @@ jobs:
           COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
           IMAGE_TAG: ${{ env.MAIN_IMAGE_TAG }}
         run: |
-          cosign sign --key env://COSIGN_PRIVATE_KEY ${GHCR_MAIN_IMAGE_NAME@L}:${{ github.run_id }}
+          cosign sign --key env://COSIGN_PRIVATE_KEY \
+            -a "repo=${{ github.repository }} \
+            -a "workflow=${{ github.workflow }} \
+            -a "ref=${{ github.sha }} \
+            ${IMAGE_TAG}
 
         
