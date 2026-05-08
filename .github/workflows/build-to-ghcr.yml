@@ -53,9 +53,9 @@ jobs:
           IMAGE_TAG: ${{ env.MAIN_IMAGE_TAG }}
         run: |
           cosign sign --key env://COSIGN_PRIVATE_KEY \
-            -a "repo=${{ github.repository }} \
-            -a "workflow=${{ github.workflow }} \
-            -a "ref=${{ github.sha }} \
+            -a "repo=${{ github.repository }}" \
+            -a "workflow=${{ github.workflow }}" \
+            -a "ref=${{ github.sha }}" \
             ${IMAGE_TAG}
 
         
