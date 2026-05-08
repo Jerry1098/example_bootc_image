@@ -57,7 +57,7 @@ jobs:
 
       - name: Sign artifact with cosign
         env:
-          COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSPHRASE }}
+          COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
           IMAGE_TAG: ${{ env.MAIN_IMAGE_TAG }}
         run: |
           cosign sign --key cosign.key $IMAGE_TAG
