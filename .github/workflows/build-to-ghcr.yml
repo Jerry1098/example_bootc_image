@@ -43,4 +43,23 @@ jobs:
           push: true
           tags: ${{ env.MAIN_IMAGE_TAG }}
 
+      - name: install cosign
+        uses: sigstore/cosign-installer@v4.1.2
+
+
+      - name: Write cosign private key
+        env:
+          COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
+        run: |
+          umask 077
+          printf "%s" "$COSIGN_PRIVATE_KEY" > cosign.key
+          chmod 600 cosign.key
+
+      - name: Sign artifact with cosign
+        env:
+          COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSPHRASE }}
+          IMAGE_TAG: ${{ env.MAIN_IMAGE_TAG }}
+        run: |
+          cosign sign --key cosign.key $IMAGE_TAG
+
         
