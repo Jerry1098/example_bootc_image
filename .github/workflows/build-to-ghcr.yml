@@ -46,20 +46,12 @@ jobs:
       - name: install cosign
         uses: sigstore/cosign-installer@v4.1.2
 
-
-      - name: Write cosign private key
-        env:
-          COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
-        run: |
-          umask 077
-          printf "%s" "$COSIGN_PRIVATE_KEY" > cosign.key
-          chmod 600 cosign.key
-
       - name: Sign artifact with cosign
         env:
           COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
+          COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
           IMAGE_TAG: ${{ env.MAIN_IMAGE_TAG }}
         run: |
-          cosign sign --key cosign.key $IMAGE_TAG
+          cosign sign --key env://COSIGN_PRIVATE_KEY ${GHCR_MAIN_IMAGE_NAME@L}:${{ github.run_id }}
 
         
